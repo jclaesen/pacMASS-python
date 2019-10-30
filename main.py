@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+
+import pandas as pd
+
+from . import preprocess
+from . import calculateAC
+from . import writeOutputFile
+
+###############################################################################
+
+def init():
+    _read_AC()
+    _read_ReRa()
+
+def _read_AC():
+    global _AC
+    _AC = pd.read_csv("./data/AC_matrix_2.txt", sep="\t").values
+    
+def getAC():
+    global _AC
+    return _AC
+
+def _read_ReRa():
+    global _ReRa
+    _ReRa = pd.read_csv("./data/RelRatio_matrix.txt", sep="\t").values
+    
+def getReRa():
+    global _ReRa
+    return _ReRa
+
+
+def pacmass (monoMassInput, numSList, filename='', ppm=10, alpha=0.05, columns=["m/z", "Charge"]):
+    '''predicting the elemental composition of peptides and small proteins based on the monoisotopic mass
+    
+    Parameters
+    ----------
+    
+    monoMassInput: float, list or string
+        A single monoisotopic mass, list of monoisotopic masses, file containing monoisotopic masses 
+    numSList: list
+        The number of sulphur-atoms
+    filename: string
+        Name of the file (txt or csv) where results will be saved
+
+    
+    Returns
+    -------
+    
+    results: numpy.ndarray or list of numpy.ndarray's
+        Elemental compositions predicted with pacMASS based on the monoisotopic mass
+        
+        Column 0: number of Carbon-atoms
+        Column 1: number of Hydrogen-atoms
+        Column 2: number of Nitrogen-atoms
+        Column 3: number of Oxygen-atoms
+        Column 4: number of Sulphur-atoms
+        Column 5: calculated monoisotopic mass (neutral)
+        Column 6: monoMassInput        
+    '''
+
+    init()
+       
+    # Importing atom composition file
+    ac = getAC()
+    # Importing relative isotope intensities
+    RR = getReRa()
+
+    if isinstance(numSList, int):
+        numSList = list(map(int, str(numSList)))
+
+    monoMass = preprocess.handleInput(monoMassInput, columns)
+
+    totalResults = []
+        
+    for n in monoMass:
+        results = []
+            
+        for nS in numSList:
+            result = calculateAC(n, RR, ac, nS, ppm, alpha)
+                
+            if result.size !=0:
+                results.append(result)
+            
+        if len(results) != 0:
+            totalResults.extend(results)
+         
+    if(len(filename)!=0):
+        writeOutputFile(totalResults, filename)
+    else:
+        print(totalResults)
+    #totalResults    
+ 
+if __name__ == "__main__":
+    results = pacmass(monoMassInput=1045.4, numSList=[0], ppm=10, alpha=0.05, columns=["m/z", "Charge"])
+    print("Result for a molecule with mass 1045.4 dalton, without S-atoms:", results)
