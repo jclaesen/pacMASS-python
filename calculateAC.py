@@ -161,10 +161,6 @@ def calculateAC(totalWeight, RR, ac, numS, ppm = 10, alpha = 0.05):
     else: print("something went wrong")
     
 
-#!/usr/bin/env python3
-
-
-
 def calculateNomMass(numS, monoMass, alpha):
     '''calculate the nominal mass of a peptide or protein based on the monoisotopic mass and the number of S-atoms
     
