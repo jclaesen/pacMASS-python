@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import pandas as pd
+import os
 
 from . import preprocess
 from . import calculateAC
@@ -14,16 +15,17 @@ def init():
 
 def _read_AC():
     global _AC
-    _AC = pd.read_csv("./data/AC_matrix_2.txt", sep="\t").values
-    
+    #_AC = pd.read_csv("./data/AC_matrix_2.txt", sep="\t").values
+    _AC = pd.read_csv(os.path.join(os.path.dirname(__file__),".\\data\\AC_matrix_2.txt"), sep="\t").values
+                      
 def getAC():
     global _AC
     return _AC
 
 def _read_ReRa():
     global _ReRa
-    _ReRa = pd.read_csv("./data/RelRatio_matrix.txt", sep="\t").values
-    
+    #_ReRa = pd.read_csv("./data/RelRatio_matrix.txt", sep="\t").values
+    _ReRa = pd.read_csv(os.path.join(os.path.dirname(__file__),".\\data\\RelRatio_matrix.txt"), sep="\t").values
 def getReRa():
     global _ReRa
     return _ReRa
@@ -76,7 +78,7 @@ def pacmass (monoMassInput, numSList, filename='', ppm=10, alpha=0.05, columns=[
         results = []
             
         for nS in numSList:
-            result = calculateAC(n, RR, ac, nS, ppm, alpha)
+            result = calculateAC.calculateAC(n, RR, ac, nS, ppm, alpha)
                 
             if result.size !=0:
                 results.append(result)
