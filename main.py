@@ -87,7 +87,7 @@ def pacmass (monoMassInput, numSList, filename='', ppm=10, alpha=0.05, columns=[
             totalResults.extend(results)
          
     if(len(filename)!=0):
-        writeOutputFile(totalResults, filename)
+        writeOutputFile.writeOutputFile(totalResults, filename)
     else:
         print(totalResults)
     #totalResults    
