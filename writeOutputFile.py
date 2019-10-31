@@ -32,10 +32,9 @@ def writeOutputFile(results, filename):
             output = output.append(pd.DataFrame(results[n], columns=["C", "H", "N", "O", "S", "calc_mass", "input_neutral_mass"]), ignore_index= True)          
     
     file = open(filename,"w",newline='')
-    print("file is opened")
-    print(formatFile)
+
     if formatFile == ".txt":
-        print("writing to txt")
+
         output.to_csv(file, sep="\t", index=False)
 
     elif formatFile == ".csv":
