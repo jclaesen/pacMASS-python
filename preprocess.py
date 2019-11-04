@@ -48,6 +48,8 @@ def filterMonoMass(monoMass, lowerLimit, upperLimit):
     if isinstance(monoMass, float):
         if((monoMass >= lowerLimit) & (monoMass <= upperLimit)):
             return([monoMass])
+        else:
+            return
     elif isinstance(monoMass, np.ndarray):
 
         down = monoMass >= lowerLimit
@@ -110,6 +112,7 @@ def handleInput(monoMassInput, columns):
     if isinstance(monoMassInput, float):
 
         monoMassOut = filterMonoMass(monoMassInput, 0, 4000)
+
                 
     # If input in a list of monomasses
     elif isinstance(monoMassInput, list):
