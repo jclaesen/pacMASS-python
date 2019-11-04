@@ -73,7 +73,13 @@ def pacmass (monoMassInput, numSList, filename='', ppm=10, alpha=0.05, columns=[
         numSList = list(map(int, str(numSList)))
 
     monoMass = preprocess.handleInput(monoMassInput, columns)
-
+    if monoMass is None:
+        print("Error: The specified mass is not within the allowed mass boundaries.")
+        return
+    elif len(monoMass)==0:
+        print("Error: The specified masses are not within the allowed mass boundaries.")
+        return
+    
     totalResults = []
         
     for n in monoMass:
@@ -92,8 +98,8 @@ def pacmass (monoMassInput, numSList, filename='', ppm=10, alpha=0.05, columns=[
         writeOutputFile.writeOutputFile(totalResults, filename)
         print("Results are written to file")
     else:
-        print(totalResults)
-    #totalResults    
+        return(totalResults)
+    
  
 if __name__ == "__main__":
     results = pacmass(monoMassInput=1045.4, numSList=[0], ppm=10, alpha=0.05, columns=["m/z", "Charge"])
