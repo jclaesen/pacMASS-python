@@ -172,7 +172,7 @@ def calculateNomMass(numS, monoMass, alpha):
     monoMass: float 
         the neutral monoisotopic mass
     alpha: float
-        significance level of the prediction interval. Currenlty only 0.05 and 0.01 are allowed
+        significance level of the prediction interval. Currently only 0.05 and 0.01 are allowed
 
     
     Returns
