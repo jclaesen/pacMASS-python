@@ -250,7 +250,8 @@ def calculateNomMass(numS, monoMass, alpha):
     elif alpha == 0.01:
         k = 3.29
     else:
-        print("alpha = {} cannot be used".format(alpha))
+        print("alpha = {} cannot be used, set alpha to 0.05".format(alpha))
+        k = 1.96
 
     lwb = nomMass - k * (MvNM)**0.5 * (corrFact + (monoMass - meanMass)**2 / diffMass)**0.5
     upb = nomMass + k * (MvNM)**0.5 * (corrFact + (monoMass - meanMass)**2 / diffMass)**0.5
@@ -387,7 +388,9 @@ def calculateIsoRatio(numS, monoMass, alpha):
     elif alpha == 0.01:
         k = 3.29
     else:
-        print("alpha = {} cannot be used".format(alpha))
+        print("alpha = {} cannot be used, set alpha to 0.05".format(alpha))
+        k = 1.96
+        
 
     lwb = isoRatio - k * (MvRR)**0.5 * (corrFact + (monoMass/1000 - meanMass)**2 / diffMass)**0.5
     upb = isoRatio + k * (MvRR)**0.5 * (corrFact + (monoMass/1000 - meanMass)**2 / diffMass)**0.5
