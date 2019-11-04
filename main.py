@@ -2,10 +2,12 @@
 
 import pandas as pd
 import os
+import sys
 
-from . import preprocess
-from . import calculateAC
-from . import writeOutputFile
+sys.path.append("..")
+from pacMASS import preprocess
+from pacMASS import calculateAC
+from pacMASS import writeOutputFile
 
 ###############################################################################
 
