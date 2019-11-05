@@ -89,14 +89,12 @@ def handleInput(monoMassInput, columns):
         if os.path.isfile(monoMassInput):
             print("importing mass input file...")
 
-            # reading given columns from inputfile (.txt)
             if monoMassInput.endswith(".txt"):
                 try:
                     mz = pd.read_csv(monoMassInput, delimiter="\t", usecols=[columns[0], columns[1]], dtype={columns[0]: float, columns[1]: float})
                 except ValueError:
                     print("Given column names don't match file")
         
-            # reading given columns from inputfile (.csv)
             elif monoMassInput.endswith(".csv"):
                 try:
                     mz = pd.read_csv(monoMassInput, delimiter=",", usecols=[columns[0], columns[1]], dtype={columns[0]: float, columns[1]: float})
@@ -107,18 +105,14 @@ def handleInput(monoMassInput, columns):
 
         monoMassOut = calculateMonoMass(mz)
 
-
-    # If input is one monomass
     if isinstance(monoMassInput, float):
 
         monoMassOut = filterMonoMass(monoMassInput, 0, 4000)
 
                 
-    # If input in a list of monomasses
     elif isinstance(monoMassInput, list):
 
         monoMassArray = np.array(monoMassInput)
-        # Filtering input
         monoMassOut = filterMonoMass(monoMassArray, 0, 4000)
         
     return(monoMassOut)

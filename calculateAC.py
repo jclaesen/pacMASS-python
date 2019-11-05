@@ -41,20 +41,15 @@ def calculateAC(totalWeight, RR, ac, numS, ppm = 10, alpha = 0.05):
     # calculate prediction interval for isoRatios
     estimateRR = calculateIsoRatio(numS, totalWeight, alpha)     # columns: fit, lwb, upb 
     
-    # filter based on isoRatio prediction interval
-    #try in pandas
     ac2 = AC[(RR2[:,0] >= estimateRR[0,1]) & (RR2[:,0] <= estimateRR[0,2]) & (RR2[:,1] >= estimateRR[1,1]) & (RR2[:,1] <= estimateRR[1,2]) & (RR2[:,2] >= estimateRR[2,1]) & (RR2[:,2] <= estimateRR[2,2]) & (RR2[:,3] >= estimateRR[3,1]) & (RR2[:,3] <= estimateRR[3,2])]
 
     if ac2.size == 0:
        return np.array([])
 
     ## STEP 2 ## generating theoretical posiible numbers for C, H, N, O
-    
-    # calculating min and max from atom compositions
     minAC = np.amin(ac2, axis=0)    # min [C, H, N, O, S]
     maxAC = np.amax(ac2, axis=0)    # max [C, H, N, O, S]
 
-    # calculating nominalMass
     nominalMass = calculateNomMass(numS, totalWeight, alpha)
     nominalMass = [round(x) for x in nominalMass]
 
@@ -99,7 +94,7 @@ def calculateAC(totalWeight, RR, ac, numS, ppm = 10, alpha = 0.05):
             elif remainderH == 3:
                 minAC[1] =  minAC[1] - 2
 
-    rangeAC = np.array([                            # rows = [C, H, N, O, S]
+    rangeAC = np.array([                            
         np.arange(0,maxAC[0]-minAC[0] + 1, 1),
         np.arange(0,maxAC[1]-minAC[1] + 1, 4),
         np.arange(0,maxAC[2]-minAC[2] + 1, 2),
@@ -108,7 +103,7 @@ def calculateAC(totalWeight, RR, ac, numS, ppm = 10, alpha = 0.05):
 
     ## STEP 3 ## Generating all combinations and mass based filter
 
-    mass = np.array([                           # rows = [C, H, N, O, S]
+    mass = np.array([                           
         list(x * weight[0] for x in rangeAC[0]),
         list(x * weight[1] for x in rangeAC[1]),
         list(x * weight[2] for x in rangeAC[2]),
@@ -116,7 +111,7 @@ def calculateAC(totalWeight, RR, ac, numS, ppm = 10, alpha = 0.05):
         list(x * weight[4] for x in rangeAC[4])
     ])
 
-    # create combination arrays
+
     nbComb = len(rangeAC[0])*len(rangeAC[1])*len(rangeAC[2])*len(rangeAC[3])*len(rangeAC[4])
     combinationAC = np.array(np.meshgrid(rangeAC[0], rangeAC[1], rangeAC[2], rangeAC[3], rangeAC[4])).reshape(5, nbComb).T
     combinationMass = np.array(np.meshgrid(mass[0], mass[1], mass[2], mass[3], mass[4])).reshape(5, nbComb).T
