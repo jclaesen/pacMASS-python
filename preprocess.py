@@ -6,6 +6,7 @@
 import pandas as pd
 import numpy as np
 import os
+import sys
 
 def calculateMonoMass(inputDF):
     """
@@ -49,17 +50,20 @@ def filterMonoMass(monoMass, lowerLimit, upperLimit):
         if((monoMass >= lowerLimit) & (monoMass <= upperLimit)):
             return([monoMass])
         else:
-            return
+            sys.exit("The specified monoisotopic mass is not within the allowed mass boundaries")
+            
     elif isinstance(monoMass, np.ndarray):
+        if monoMass.dtype=='float64':
 
-        down = monoMass >= lowerLimit
-        up = monoMass <= upperLimit
+            down = monoMass >= lowerLimit
+            up = monoMass <= upperLimit
         
-        index = np.where(down & up)
-        monoMassFiltered = list(monoMass[index])
+            index = np.where(down & up)
+            monoMassFiltered = list(monoMass[index])
 
-        return monoMassFiltered
-
+            return monoMassFiltered
+        else:
+            sys.exit("The specified monoisotopic masses are not defined as float")
 def handleInput(monoMassInput, columns):
     """
     Parameters
@@ -77,13 +81,11 @@ def handleInput(monoMassInput, columns):
     """
     
     if not isinstance(monoMassInput, str) and not isinstance(monoMassInput, float) and not isinstance(monoMassInput, list):
-        print("Argument 'monoMassInput' should be a list, float or a string")
-        return
-    
+        sys.exit("Argument 'monoMassInput' should be a list, float or a string")
+  
     if not isinstance(columns, list) or not len(columns)==2:
-        print("Argument 'columns' should be a list of length 2")
-        return
- 
+        sys.exit("Argument 'columns' should be a list of length 2")
+
     
     if isinstance(monoMassInput, str):
         if os.path.isfile(monoMassInput):
@@ -92,17 +94,19 @@ def handleInput(monoMassInput, columns):
             if monoMassInput.endswith(".txt"):
                 try:
                     mz = pd.read_csv(monoMassInput, delimiter="\t", usecols=[columns[0], columns[1]], dtype={columns[0]: float, columns[1]: float})
-                except ValueError:
-                    print("Given column names don't match file")
+                except Exception:
+                    sys.exit("Given column names don't match file")
         
             elif monoMassInput.endswith(".csv"):
                 try:
                     mz = pd.read_csv(monoMassInput, delimiter=",", usecols=[columns[0], columns[1]], dtype={columns[0]: float, columns[1]: float})
-                except ValueError:
-                    print("Given column names don't match file")
+                except Exception:
+                    sys.exit("Given column names don't match file")
         
-            else: print("Error: File can not be opened : \"{}\"".format(monoMassInput))
-
+            else: 
+                sys.exit("Error: File can not be opened : \"{}\"".format(monoMassInput))
+            
+            
         print("calculating monoisotopic mass...")
         monoMassOut = calculateMonoMass(mz)
 

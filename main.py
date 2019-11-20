@@ -74,10 +74,10 @@ def pacmass (monoMassInput, numSList, filename='', ppm=10, alpha=0.05, columns=[
 
     monoMass = preprocess.handleInput(monoMassInput, columns)
     if monoMass is None:
-        print("Error: The specified mass is not within the allowed mass boundaries.")
+        sys.exit("Error: There is a problem with one of your input parameters.")
         return
     elif len(monoMass)==0:
-        print("Error: The specified masses are not within the allowed mass boundaries.")
+        sys.exit("Error: The specified masses are not within the allowed mass boundaries.")
         return
     
     totalResults = []
