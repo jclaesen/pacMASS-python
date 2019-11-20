@@ -81,7 +81,7 @@ def pacmass (monoMassInput, numSList, filename='', ppm=10, alpha=0.05, columns=[
         return
     
     totalResults = []
-        
+    print("predicting elemental compositions...")    
     for n in monoMass:
         results = []
             
