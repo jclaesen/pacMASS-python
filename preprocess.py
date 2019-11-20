@@ -103,6 +103,7 @@ def handleInput(monoMassInput, columns):
         
             else: print("Error: File can not be opened : \"{}\"".format(monoMassInput))
 
+        print("calculating monoisotopic mass...")
         monoMassOut = calculateMonoMass(mz)
 
     if isinstance(monoMassInput, float):
