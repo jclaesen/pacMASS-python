@@ -24,8 +24,8 @@ def calculateMonoMass(inputDF):
     """
     monoMass = list()
 
-    for row in inputDF.iterrows():   # row[1][0]=charge, row[1][1]=m/z
-        monoMass.append(row[1][1] * row[1][0] - row[1][0] * -1.00794)
+    for row in inputDF.iterrows():   # row[1][1]=charge, row[1][0]=m/z
+        monoMass.append(row[1][0] * row[1][1] - row[1][1] * 1.00794)
 
     return monoMass
 
