@@ -8,25 +8,22 @@ import numpy as np
 import os
 import sys
 
-def calculateMonoMass(inputDF):
+def calculateMonoMass(inputDF, columns):
     """
     Function that calculates the neutral monoisotopic mass
     
     Parameters
     ----------
-        inputDF: numpy array
-            measured masses and charges
+        inputDF: numpy pandas DataFrame
+        columns: mass and charge indicators
+            
         
     Returns
     -------
         monoMass: list
             Neutral monoisotopic masses
     """
-    monoMass = list()
-
-    for row in inputDF.iterrows():   # row[1][1]=charge, row[1][0]=m/z
-        monoMass.append(row[1][0] * row[1][1] - row[1][1] * 1.00794)
-
+    monoMass = list(inputDF[columns[0]]*inputDF[columns[1]]-1.0079*inputDF[columns[1]])
     return monoMass
 
 def filterMonoMass(monoMass, lowerLimit, upperLimit):
@@ -92,23 +89,19 @@ def handleInput(monoMassInput, columns):
             print("importing mass input file...")
 
             if monoMassInput.endswith(".txt"):
-                try:
-                    mz = pd.read_csv(monoMassInput, delimiter="\t", usecols=[columns[0], columns[1]], dtype={columns[0]: float, columns[1]: float})
-                except Exception:
-                    sys.exit("Given column names don't match file")
+ 
+                    mz = pd.read_csv(monoMassInput, delimiter="\t")
         
             elif monoMassInput.endswith(".csv"):
-                try:
-                    mz = pd.read_csv(monoMassInput, delimiter=",", usecols=[columns[0], columns[1]], dtype={columns[0]: float, columns[1]: float})
-                except Exception:
-                    sys.exit("Given column names don't match file")
-        
+ 
+                    mz = pd.read_csv(monoMassInput, delimiter=",")
+         
             else: 
                 sys.exit("Error: File can not be opened : \"{}\"".format(monoMassInput))
             
             
         print("calculating monoisotopic mass...")
-        monoMassOut = calculateMonoMass(mz)
+        monoMassOut = calculateMonoMass(mz, columns)
 
     if isinstance(monoMassInput, float):
 
